@@ -1,0 +1,53 @@
+version: "3.3"
+
+services:
+  drupalv2:
+    container_name: "${PROJECT_NAME}_php_${VERSION}"
+    image: registry.dev-psiware.com.ar/drupal9:php-7.3
+    environment:
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - MYSQL_HOST
+      - MYSQL_PORT
+    restart: $RESTART_POLICY
+    volumes:
+      - ./repository:/var/www/html
+      # - ./drupal-settings/settings.local.php:/var/www/html/web/sites/default/settings.local.php
+      - ./repository/etc/drupal/settings.psiware.dev.php:/var/www/html/src/web/sites/default/settings.php
+      # - ./drupal-settings/php.ini:/usr/local/etc/php/php.ini
+      # - private_files:/var/www/private
+      - ./public_files:/var/www/html/src/web/sites/default/files
+      - ./private:/var/www/html/src/web/sites/default/private
+
+  webserver:
+    image: nginx:1.17.4-alpine
+    container_name: "${PROJECT_NAME}_webserver_${VERSION}"
+    depends_on:
+      - drupalv2
+    restart: $RESTART_POLICY
+    volumes:
+      - ./repository:/var/www/html
+      - ./nginx-conf:/etc/nginx/conf.d
+      #- ./nginx/log:/var/log/nginx
+      - ./public_files:/var/www/html/src/web/sites/default/files
+    ports:
+      - ${WEBSERVER_PORT}:80
+
+  mariadb:
+    image: mariadb
+    container_name: "${PROJECT_NAME}_mariadb_${VERSION}"
+    environment:
+      - MYSQL_ROOT_PASSWORD
+      - MYSQL_DATABASE
+      - MYSQL_USER
+      - MYSQL_PASSWORD
+      - DB_RESTORE_TARGET="/docker-entrypoint-initdb.d/dump.sql"
+    # ports:
+      # - "${MYSQL_PORT}:3306"
+    restart: $RESTART_POLICY
+    volumes:
+     - ./db-data:/var/lib/mysql #comentar si no es necesario persistir cambios de la BD
+    #  - ./database-backups/backup.sql:/docker-entrypoint-initdb.d/dump.sql
+     - ./dump.sql:/docker-entrypoint-initdb.d/dump.sql
+    #  - ./database-backups:/backups
