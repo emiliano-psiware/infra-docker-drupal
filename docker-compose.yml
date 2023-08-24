@@ -3,13 +3,14 @@ version: "3.3"
 services:
   drupalv2:
     container_name: "${PROJECT_NAME}_php_${VERSION}"
-    image: registry.dev-psiware.com.ar/drupal9:php-7.3
+    image: registry.dev-psiware.com.ar/drupal9:php-7.4
+    #image: registry.dev-psiware.com.ar/drupal9:php-7.3
     environment:
       - MYSQL_DATABASE
       - MYSQL_USER
       - MYSQL_PASSWORD
       - MYSQL_HOST
-      - MYSQL_PORT
+      - MYSQL_PORT=3306
     restart: $RESTART_POLICY
     volumes:
       - ./repository:/var/www/html
@@ -43,8 +44,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - DB_RESTORE_TARGET="/docker-entrypoint-initdb.d/dump.sql"
-    ports:
-      - "${MYSQL_PORT}:3306"
+#    ports:
+#      - "${MYSQL_PORT}:3306"
     restart: $RESTART_POLICY
     volumes:
      - ./db-data:/var/lib/mysql #comentar si no es necesario persistir cambios de la BD
