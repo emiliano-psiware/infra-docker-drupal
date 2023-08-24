@@ -13,8 +13,8 @@ services:
     restart: $RESTART_POLICY
     volumes:
       - ./repository:/var/www/html
-      # - ./drupal-settings/settings.local.php:/var/www/html/web/sites/default/settings.local.php
-      - ./repository/etc/drupal/settings.psiware.dev.php:/var/www/html/src/web/sites/default/settings.php
+      - ./drupal-settings/settings.local.php:/var/www/html/web/sites/default/settings.local.php
+      # - ./repository/etc/drupal/settings.psiware.dev.php:/var/www/html/src/web/sites/default/settings.php
       # - ./drupal-settings/php.ini:/usr/local/etc/php/php.ini
       # - private_files:/var/www/private
       - ./public_files:/var/www/html/src/web/sites/default/files
