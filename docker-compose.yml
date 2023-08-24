@@ -43,8 +43,8 @@ services:
       - MYSQL_USER
       - MYSQL_PASSWORD
       - DB_RESTORE_TARGET="/docker-entrypoint-initdb.d/dump.sql"
-    # ports:
-      # - "${MYSQL_PORT}:3306"
+    ports:
+      - "${MYSQL_PORT}:3306"
     restart: $RESTART_POLICY
     volumes:
      - ./db-data:/var/lib/mysql #comentar si no es necesario persistir cambios de la BD
