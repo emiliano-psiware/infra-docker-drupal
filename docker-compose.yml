@@ -2,8 +2,12 @@ version: "3.3"
 
 services:
   drupalv2:
+    build:
+      context: ./drupal-settings
     container_name: "${PROJECT_NAME}_php_${VERSION}"
-    image: registry.dev-psiware.com.ar/drupal9:php-7.4
+#    image: drupal:9.5-php8.1-fpm-alpine 
+    #registry.dev-psiware.com.ar/drupal9-sqlsrv:php-8.2 
+    #registry.dev-psiware.com.ar/drupal9:php-8.2
     #image: registry.dev-psiware.com.ar/drupal9:php-7.3
     environment:
       - MYSQL_DATABASE
@@ -13,13 +17,14 @@ services:
       - MYSQL_PORT=3306
     restart: $RESTART_POLICY
     volumes:
-      - ./repository:/var/www/html
-      - ./drupal-settings/settings.local.php:/var/www/html/web/sites/default/settings.local.php
+     # - ./repository:/var/www/html
+      - ./repository:/opt/drupal
+      - ./drupal-settings/settings.local.php:/opt/drupal/web/sites/default/settings.local.php
       # - ./repository/etc/drupal/settings.psiware.dev.php:/var/www/html/src/web/sites/default/settings.php
       # - ./drupal-settings/php.ini:/usr/local/etc/php/php.ini
       # - private_files:/var/www/private
-      - ./public_files:/var/www/html/src/web/sites/default/files
-      - ./private:/var/www/html/src/web/sites/default/private
+      #- ./public_files:/var/www/html/src/web/sites/default/files
+      #- ./private:/var/www/html/src/web/sites/default/private
 
   webserver:
     image: nginx:1.17.4-alpine

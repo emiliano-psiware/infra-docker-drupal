@@ -9,3 +9,5 @@ $databases['default']['default'] = array (
   'driver' => 'mysql',
 );
 
+$settings['hash_salt']= "test";
+
